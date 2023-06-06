@@ -169,7 +169,10 @@ export const wait = (sec: number): Promise<void> => {
  * @param amplitude - 0 < amplitude < 1
  * @throws {Error} If the amplitude is not between 0 and 1.
  */
-export const jitterBusyWait = (milliseconds: number, amplitude: number = 0.3): void => {
+export const jitterBusyWait = (
+  milliseconds: number,
+  amplitude: number = 0.3
+): void => {
   if (amplitude < 0 || amplitude > 1) {
     throw new Error('Amplitude must be between 0 and 1');
   }
@@ -178,7 +181,8 @@ export const jitterBusyWait = (milliseconds: number, amplitude: number = 0.3): v
   const maxJitter = 1 + amplitude;
 
   const jitterRange = milliseconds * (maxJitter - minJitter);
-  const jitterSec = milliseconds + Math.random() * jitterRange - jitterRange / 2;
+  const jitterSec =
+    milliseconds + Math.random() * jitterRange - jitterRange / 2;
 
   let start = Date.now(),
     now = start;
@@ -304,4 +308,142 @@ function getDateDiff(date1: Date, date2: Date): number {
   const diffInMilliseconds = Math.abs(date1.getTime() - date2.getTime());
 
   return Math.round(diffInMilliseconds / oneDayInMilliseconds);
+}
+
+/**
+ * Validate an email address.
+ *
+ * @param email - 'test@test.com'
+ * @return true
+ */
+function isValidEmail(email: string): boolean {
+  const re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+  return re.test(email);
+}
+
+/**
+ * Debounce a function.
+ *
+ * @param func - A function you want to debounce.
+ * @param waitFor - The number of milliseconds to wait before calling the function.
+ * @returns - A debounced version of the function.
+ */
+function debounce<F extends (...args: any[]) => void>(
+  func: F,
+  waitFor: number
+) {
+  let timeoutId: ReturnType<typeof setTimeout>;
+
+  return (...args: Parameters<F>): void => {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+
+    timeoutId = setTimeout(() => func(...args), waitFor);
+  };
+}
+
+/**
+ * Throttle a function so that it can only be called once every X milliseconds.
+ * 
+ * @param func - A function you want to throttle.
+ * @param limit - The number of milliseconds to throttle the function.
+ * @returns - A throttled version of the function.
+ */
+function throttle<F extends (...args: any[]) => void>(
+  func: F,
+  limit: number
+): (...args: Parameters<F>) => void {
+  let lastFunc: ReturnType<typeof setTimeout> | null = null;
+  let lastRan: number = 0;
+
+  return function (...args: Parameters<F>) {
+    if (!lastRan) {
+      func(...args);
+      lastRan = Date.now();
+    } else {
+      if (lastFunc !== null) clearTimeout(lastFunc);
+      lastFunc = setTimeout(function () {
+        if (Date.now() - lastRan >= limit) {
+          func(...args);
+          lastRan = Date.now();
+        }
+      }, limit - (Date.now() - lastRan));
+    }
+  };
+}
+
+/**
+ * Throttle a function so that it can only be called a certain number of times per second.
+ * 
+ * @param func - A function you want to throttle.
+ * @param times - The number of times the function can be called per second.
+ * @returns - A throttled version of the function.
+ */
+function throttlePerSecond<F extends (...args: any[]) => void>(func: F, times: number): (...args: Parameters<F>) => void {
+  let lastRan: number = 0;
+  let callsInLastSecond: number = 0;
+
+  return function(...args: Parameters<F>) {
+      const now = Date.now();
+
+      if (now - lastRan >= 1000) {
+          lastRan = now;
+          callsInLastSecond = 0;
+      }
+
+      if (callsInLastSecond < times) {
+          func(...args);
+          callsInLastSecond++;
+      }
+  };
+}
+
+/**
+ * Create an array of numbers between two numbers.
+ * 
+ * @param start
+ * @param end 
+ * @returns 
+ */
+function range(start: number, end: number): number[] {
+  return Array.from({length: (end - start)}, (v, k) => k + start);
+}
+
+/**
+ * Truncate a string to a specified length.
+ * 
+ * @param str - The string that you want to truncate.
+ * @param length - The maximum length of the string.
+ * @param ending - The string to append to the end of the truncated string.
+ * @returns - The truncated string.
+ */
+function truncate(str: string, length: number, ending = '...'): string {
+  return str.length > length ? str.substring(0, length) + ending : str;
+}
+
+/**
+ * Generate a random string of a specified length.
+ * 
+ * @param len - The length of the random string.
+ * @param mode - The type of characters to include in the random string. Valid values are "alpha", "num", or "alphanumeric".
+ * @returns 
+ */
+function randomString(len: number, mode: string = 'alphanumeric'): string {
+  let result = '';
+  const characters: Record<'alpha' | 'num' | 'alphanumeric', string> = {
+      'alpha': 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',
+      'num': '0123456789',
+      'alphanumeric': 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+  };
+  const chosenCharacters = characters[mode as 'alpha' | 'num' | 'alphanumeric'];
+
+  if (!chosenCharacters) {
+      throw new Error('Invalid mode. Mode must be "alpha", "num", or "alphanumeric".');
+  }
+
+  for (let i = 0; i < len; i++) {
+      result += chosenCharacters.charAt(Math.floor(Math.random() * chosenCharacters.length));
+  }
+  return result;
 }
