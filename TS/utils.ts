@@ -1,5 +1,6 @@
 /**
  * Converts milliseconds to a formatted time string in the format "hh:mm:ss"
+ * 
  * @param {number} ms
  * @returns {string}
  */
@@ -19,6 +20,7 @@ export const formatMsToHMS = (ms: number): string => {
 
 /**
  * Converts a time string in the format "hh:mm:ss" to milliseconds
+ * 
  * @param {string} timeString
  * @returns {number} - milliseconds
  * @throws {Error}
@@ -64,6 +66,7 @@ export const formatHMSToMs = (timeString: string): number => {
 
 /**
  * Converts a phone number to a specific format based on its length and prefix.
+ * 
  * @param {string} phone - 12345678, 0212345678, 03212345678, 01012345678....
  * @returns {string} - 1588-1234, 010-1234-5678...
  */
@@ -86,6 +89,7 @@ export const phoneNumberToString = (phone: string): string => {
 
 /**
  * Formats a number with commas for thousands separators.
+ * 
  * @param {number} number - 1000
  * @returns {string} - 1,000
  */
@@ -95,6 +99,7 @@ export const numberWithCommas = (number: number): string => {
 
 /**
  * Removes commas from a comma-separated number string.
+ * 
  * @param {string} numberString - The comma-separated number string.
  * @returns {string} - The number string without commas.
  */
@@ -104,6 +109,7 @@ export const removeCommasFromNumber = (numberString: string): string => {
 
 /**
  * Converts degrees to radians.
+ * 
  * @param {number} degrees - 1,000
  * @returns {number} - 1000
  */
@@ -113,6 +119,7 @@ export const radians = (degrees: number): number => {
 
 /**
  * Calculates the distance between two points on the Earth's surface using their coordinates.
+ * 
  * @param {object} pt1 - The first point's coordinates { coordinates: [lat1, lon1] }.
  * @param {object} pt2 - The second point
  * @returns {number} - The distance between the two points in kilometers.
@@ -199,10 +206,10 @@ export const jitterBusyWait = (
  * @throws {Error} If the amplitude is not between 0 and 1.
  * @return
  */
-export async function jitterSleep(
+export const jitterSleep = async (
   milliseconds: number,
   amplitude: number = 0.3
-): Promise<void> {
+): Promise<void> => {
   if (amplitude < 0 || amplitude > 1) {
     throw new Error('Amplitude must be between 0 and 1');
   }
@@ -214,7 +221,7 @@ export async function jitterSleep(
   const jitter = milliseconds + Math.random() * jitterRange - jitterRange / 2;
 
   return new Promise((resolve) => setTimeout(resolve, jitter));
-}
+};
 
 /**
  * Converts camelCase to snake_case.
@@ -222,9 +229,9 @@ export async function jitterSleep(
  * @param str
  * @return
  */
-function camelToSnake(str: string): string {
+export const camelToSnake = (str: string): string => {
   return str.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`);
-}
+};
 
 /**
  * Converts snake_case to camelCase.
@@ -232,9 +239,9 @@ function camelToSnake(str: string): string {
  * @param str
  * @return
  */
-function snakeToCamel(str: string): string {
+export const snakeToCamel = (str: string): string => {
   return str.replace(/(_\w)/g, (matches) => matches[1].toUpperCase());
-}
+};
 
 /**
  * Parse the query parameters from a URL string.
@@ -242,7 +249,7 @@ function snakeToCamel(str: string): string {
  * @param {string} url
  * @return
  */
-export function parseUrlParam(url: string): { [key: string]: string } {
+export const parseUrlParam = (url: string): { [key: string]: string } => {
   const params: { [key: string]: string } = {};
   const urlObj = new URL(url);
 
@@ -251,7 +258,7 @@ export function parseUrlParam(url: string): { [key: string]: string } {
   }
 
   return params;
-}
+};
 
 /**
  * Create an array of dates between two dates.
@@ -260,7 +267,7 @@ export function parseUrlParam(url: string): { [key: string]: string } {
  * @param {Date} endDate
  * @return An array of Date objects for each day between the start and end dates
  */
-function createPeriodArray(startDate: Date, endDate: Date): Date[] {
+export const createPeriodArray = (startDate: Date, endDate: Date): Date[] => {
   let currentDate = new Date(startDate);
   const dates: Date[] = [];
 
@@ -270,7 +277,7 @@ function createPeriodArray(startDate: Date, endDate: Date): Date[] {
   }
 
   return dates;
-}
+};
 
 /**
  * Add a number of days to a date.
@@ -279,11 +286,11 @@ function createPeriodArray(startDate: Date, endDate: Date): Date[] {
  * @param {number} days
  * @return A new Date object representing the date after adding the specified number of days.
  */
-function addDays(date: Date, days: number): Date {
+export const addDays = (date: Date, days: number): Date => {
   const result = new Date(date);
   result.setDate(result.getDate() + days);
   return result;
-}
+};
 
 /**
  * Subtract a number of days from a date.
@@ -292,9 +299,9 @@ function addDays(date: Date, days: number): Date {
  * @param {number} days
  * @return A new Date object representing the date after subtracting the specified number of days.
  */
-function subDays(date: Date, days: number): Date {
+export const subDays = (date: Date, days: number): Date => {
   return addDays(date, -days);
-}
+};
 
 /**
  * Calculate the difference between two dates in days.
@@ -303,12 +310,12 @@ function subDays(date: Date, days: number): Date {
  * @param date2  - new Date('2023-02-01')
  * @return 31
  */
-function getDateDiff(date1: Date, date2: Date): number {
+export const getDateDiff = (date1: Date, date2: Date): number => {
   const oneDayInMilliseconds = 1000 * 60 * 60 * 24;
   const diffInMilliseconds = Math.abs(date1.getTime() - date2.getTime());
 
   return Math.round(diffInMilliseconds / oneDayInMilliseconds);
-}
+};
 
 /**
  * Validate an email address.
@@ -316,10 +323,10 @@ function getDateDiff(date1: Date, date2: Date): number {
  * @param email - 'test@test.com'
  * @return true
  */
-function isValidEmail(email: string): boolean {
+export const isValidEmail = (email: string): boolean => {
   const re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
   return re.test(email);
-}
+};
 
 /**
  * Debounce a function.
@@ -328,10 +335,10 @@ function isValidEmail(email: string): boolean {
  * @param waitFor - The number of milliseconds to wait before calling the function.
  * @returns - A debounced version of the function.
  */
-function debounce<F extends (...args: any[]) => void>(
+export const debounce = <F extends (...args: any[]) => void>(
   func: F,
   waitFor: number
-) {
+) => {
   let timeoutId: ReturnType<typeof setTimeout>;
 
   return (...args: Parameters<F>): void => {
@@ -341,19 +348,19 @@ function debounce<F extends (...args: any[]) => void>(
 
     timeoutId = setTimeout(() => func(...args), waitFor);
   };
-}
+};
 
 /**
  * Throttle a function so that it can only be called once every X milliseconds.
- * 
+ *
  * @param func - A function you want to throttle.
  * @param limit - The number of milliseconds to throttle the function.
  * @returns - A throttled version of the function.
  */
-function throttle<F extends (...args: any[]) => void>(
+export const throttle = <F extends (...args: any[]) => void>(
   func: F,
   limit: number
-): (...args: Parameters<F>) => void {
+): ((...args: Parameters<F>) => void) => {
   let lastFunc: ReturnType<typeof setTimeout> | null = null;
   let lastRan: number = 0;
 
@@ -371,79 +378,94 @@ function throttle<F extends (...args: any[]) => void>(
       }, limit - (Date.now() - lastRan));
     }
   };
-}
+};
 
 /**
  * Throttle a function so that it can only be called a certain number of times per second.
- * 
+ *
  * @param func - A function you want to throttle.
  * @param times - The number of times the function can be called per second.
  * @returns - A throttled version of the function.
  */
-function throttlePerSecond<F extends (...args: any[]) => void>(func: F, times: number): (...args: Parameters<F>) => void {
+export const throttlePerSecond = <F extends (...args: any[]) => void>(
+  func: F,
+  times: number
+): ((...args: Parameters<F>) => void) => {
   let lastRan: number = 0;
   let callsInLastSecond: number = 0;
 
-  return function(...args: Parameters<F>) {
-      const now = Date.now();
+  return function (...args: Parameters<F>) {
+    const now = Date.now();
 
-      if (now - lastRan >= 1000) {
-          lastRan = now;
-          callsInLastSecond = 0;
-      }
+    if (now - lastRan >= 1000) {
+      lastRan = now;
+      callsInLastSecond = 0;
+    }
 
-      if (callsInLastSecond < times) {
-          func(...args);
-          callsInLastSecond++;
-      }
+    if (callsInLastSecond < times) {
+      func(...args);
+      callsInLastSecond++;
+    }
   };
-}
+};
 
 /**
  * Create an array of numbers between two numbers.
- * 
+ *
  * @param start
- * @param end 
- * @returns 
+ * @param end
+ * @returns
  */
-function range(start: number, end: number): number[] {
-  return Array.from({length: (end - start)}, (v, k) => k + start);
-}
+export const range = (start: number, end: number): number[] => {
+  return Array.from({ length: end - start }, (v, k) => k + start);
+};
 
 /**
  * Truncate a string to a specified length.
- * 
+ *
  * @param str - The string that you want to truncate.
  * @param length - The maximum length of the string.
  * @param ending - The string to append to the end of the truncated string.
  * @returns - The truncated string.
  */
-function truncate(str: string, length: number, ending = '...'): string {
+export const truncate = (
+  str: string,
+  length: number,
+  ending = '...'
+): string => {
   return str.length > length ? str.substring(0, length) + ending : str;
-}
+};
 
 /**
  * Generate a random string of a specified length.
- * 
+ *
  * @param len - The length of the random string.
- * @param mode - The type of characters to include in the random string. Valid values are "alpha", "num", or "alphanumeric".
- * @returns 
+ * @param mode - The type of characters to include in the random string. Valid values are "alpha", "num", or "alphanum".
+ * @throws If the mode is not "alpha", "num", or "alphanum".
+ * @returns
  */
-function randomString(len: number, mode: string = 'alphanumeric'): string {
+export const randomString = (
+  len: number,
+  mode: string = 'alphanum'
+): string => {
   let result = '';
-  const characters: Record<'alpha' | 'num' | 'alphanumeric', string> = {
-      'alpha': 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',
-      'num': '0123456789',
-      'alphanumeric': 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+  const characters: Record<'alpha' | 'num' | 'alphanum', string> = {
+    alpha: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',
+    num: '0123456789',
+    alphanum: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',
   };
-  const chosenCharacters = characters[mode as 'alpha' | 'num' | 'alphanumeric'];
+  const chosenCharacters = characters[mode as 'alpha' | 'num' | 'alphanum'];
 
   if (!chosenCharacters) {
-      throw new Error('Invalid mode. Mode must be "alpha", "num", or "alphanumeric".');
+    throw new Error(
+      'Invalid mode. Mode must be "alpha", "num", or "alphanum".'
+    );
   }
 
   for (let i = 0; i < len; i++) {
-      result += chosenCharacters.charAt(Math.floor(Math.random() * chosenCharacters.length));
+    result += chosenCharacters.charAt(
+      Math.floor(Math.random() * chosenCharacters.length)
+    );
   }
   return result;
-}
+};
