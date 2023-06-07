@@ -1,6 +1,6 @@
 /**
  * Converts milliseconds to a formatted time string in the format "hh:mm:ss"
- * 
+ *
  * @param {number} ms
  * @returns {string}
  */
@@ -20,7 +20,7 @@ export const formatMsToHMS = (ms: number): string => {
 
 /**
  * Converts a time string in the format "hh:mm:ss" to milliseconds
- * 
+ *
  * @param {string} timeString
  * @returns {number} - milliseconds
  * @throws {Error}
@@ -66,7 +66,7 @@ export const formatHMSToMs = (timeString: string): number => {
 
 /**
  * Converts a phone number to a specific format based on its length and prefix.
- * 
+ *
  * @param {string} phone - 12345678, 0212345678, 03212345678, 01012345678....
  * @returns {string} - 1588-1234, 010-1234-5678...
  */
@@ -89,7 +89,7 @@ export const phoneNumberToString = (phone: string): string => {
 
 /**
  * Formats a number with commas for thousands separators.
- * 
+ *
  * @param {number} number - 1000
  * @returns {string} - 1,000
  */
@@ -99,7 +99,7 @@ export const numberWithCommas = (number: number): string => {
 
 /**
  * Removes commas from a comma-separated number string.
- * 
+ *
  * @param {string} numberString - The comma-separated number string.
  * @returns {string} - The number string without commas.
  */
@@ -109,7 +109,7 @@ export const removeCommasFromNumber = (numberString: string): string => {
 
 /**
  * Converts degrees to radians.
- * 
+ *
  * @param {number} degrees - 1,000
  * @returns {number} - 1000
  */
@@ -119,7 +119,7 @@ export const radians = (degrees: number): number => {
 
 /**
  * Calculates the distance between two points on the Earth's surface using their coordinates.
- * 
+ *
  * @param {object} pt1 - The first point's coordinates { coordinates: [lat1, lon1] }.
  * @param {object} pt2 - The second point
  * @returns {number} - The distance between the two points in kilometers.
@@ -468,4 +468,124 @@ export const randomString = (
     );
   }
   return result;
+};
+
+/**
+ * Remove some properties from an object.
+ *
+ * @param obj
+ * @param keys
+ * @returns
+ */
+export const omit = <T extends object, K extends keyof T>(
+  obj: T,
+  keys: K[]
+): Omit<T, K> => {
+  const result = { ...obj };
+  keys.forEach((key) => delete result[key]);
+  return result;
+};
+
+/**
+ * Pick some properties from an object.
+ *
+ * @param obj
+ * @param keys
+ * @returns
+ */
+export const pick = <T extends object, K extends keyof T>(
+  obj: T,
+  keys: K[]
+): Pick<T, K> => {
+  const result = {} as Pick<T, K>;
+  keys.forEach((key) => {
+    if (key in obj) {
+      result[key] = obj[key];
+    }
+  });
+  return result;
+};
+
+/**
+ * Pluck a property from an array of objects.
+ *
+ * @param arr
+ * @param key
+ * @returns
+ */
+export const pluck = <T, K extends keyof T>(arr: T[], key: K): T[K][] => {
+  return arr.map((item) => item[key]);
+};
+
+const slugify = (text: string, separator = '-'): string => {
+  return text
+    .trim()
+    .toLowerCase()
+    .replace(/^-+|-+$/g, '') // Remove leading and trailing dashes
+    .replace(/[^\w\s-]/g, '') // Remove special characters
+    .replace(/\_/g, separator) // Replace _ with -
+    .replace(/\s+/g, separator) // Replace spaces with dashes
+    .replace(/\-\-+/g, separator); // Replace multiple - with single -
+};
+
+/**
+ * Capitalize the first letter of each word in a string.
+ *
+ * @param str
+ * @returns
+ */
+export const capitalize = (str: string): string => {
+  const arr = str.trim().toLowerCase().split(' ');
+  const capitalizedArr = arr.map(
+    (word) => `${word.charAt(0).toUpperCase()}${word.slice(1)}`
+  );
+  return capitalizedArr.join(' ');
+};
+
+/**
+ * Pad a string with a specified character to a specified length.
+ *
+ * @param text
+ * @param length
+ * @param isLeft
+ * @param paddingChar
+ * @returns
+ */
+export const pad = (
+  text: string,
+  length: number,
+  isLeft: boolean,
+  paddingChar: string = ' '
+): string => {
+  if (text.length >= length) {
+    return text;
+  }
+  const paddingLength = length - text.length;
+  const padding = paddingChar.repeat(paddingLength);
+
+  return isLeft ? padding + text : text + padding;
+};
+
+/**
+ * Pick a random element from an array.
+ *
+ * @param arr
+ * @returns
+ */
+export const pickRandomElement = (arr: string[]) => {
+  return arr[Math.floor(Math.random() * arr.length)];
+};
+
+/**
+ * Check if a value is empty.
+ *
+ * @param value - string, array, object, or a single value
+ * @returns
+ */
+export const isEmpty = (value: any): boolean => {
+  if (typeof value === 'string' && !value.trim()) return true;
+  if (Array.isArray(value) && value.length === 0) return true;
+  if (typeof value === 'object' && Object.keys(value).length === 0) return true;
+  if (value == null || value === undefined) return true;
+  return false;
 };

@@ -77,3 +77,24 @@
 - **randomString**
   - 지정된 길이의 임의의 문자열을 생성합니다.
   - Generate a random string of a specified length.
+- **omit**
+  - 객체에서 특정 키들을 제거합니다.
+  - Remove some properties from an object.
+- **pick**
+  - 객체에서 특정 키들만 추출합니다.
+  - Pick some properties from an object.
+- **pluck**
+  - 객체에서 특정 키의 값들만 추출합니다.
+  - Pluck a property from an array of objects.
+- **capitalize**
+  - 각 단어의 첫글자만 대문자로 바꿉니다.
+  - Capitalize the first letter of each word in a string.
+- **pad**
+  - 문자열을 특정 길이만큼 패딩 처리합니다.
+  - Pad a string with a specified character to a specified length.
+- **pickRandomElement**
+  - 배열에서 임의값을 선택 해 줍니다.
+  - Pick a random element from an array.
+- **isEmpty**
+  - 특정 값이 비어있는지 점검합니다.
+  - Check if a value is empty.
